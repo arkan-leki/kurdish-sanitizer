@@ -1,7 +1,7 @@
 {
-  "name": "kurdish-keyboard",
+  "name": "kurdish-sanitizer",
   "version": "1.0.0",
-  "description": "Mobile-friendly Kurdish (Sorani) virtual keyboard with C4Kurd-style layout — outputs Unicode Kurdish characters",
+  "description": "Kurdish (Sorani) virtual keyboard, text sanitizer, and auto-converter — fixes Ali-K, C4Kurd, Arabic keyboard, and Latin input to proper Unicode",
   "main": "dist/kurdish-keyboard.js",
   "module": "dist/kurdish-keyboard.js",
   "types": "dist/kurdish-keyboard.d.ts",

@@ -1,6 +1,6 @@
-# ⌨️ Kurdish Keyboard
+# ⌨️ Kurdish Sanitizer
 
-A mobile-friendly **TypeScript virtual keyboard** for typing Kurdish (Sorani) with an Arabic-script layout. Includes auto-conversion from Ali-K, C4Kurd, Latin, and Arabic keyboard input — plus a built-in Kurdish text sanitizer.
+A mobile-friendly **TypeScript virtual keyboard** for Kurdish (Sorani) with text sanitization and auto-conversion from Ali-K, C4Kurd, Latin, and Arabic keyboard input to proper Kurdish Unicode.
 
 ---
 
@@ -23,14 +23,14 @@ A mobile-friendly **TypeScript virtual keyboard** for typing Kurdish (Sorani) wi
 ### Install
 
 ```bash
-npm install kurdish-keyboard
+npm install kurdish-sanitizer
 ```
 
 ### Usage
 
 ```ts
-import { KurdishKeyboard } from 'kurdish-keyboard';
-import 'kurdish-keyboard/dist/kurdish-keyboard.css';
+import { KurdishKeyboard } from 'kurdish-sanitizer';
+import 'kurdish-sanitizer/css';
 
 // Attach to an input
 new KurdishKeyboard({
