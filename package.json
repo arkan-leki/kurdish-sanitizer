@@ -1,0 +1,47 @@
+{
+  "name": "kurdish-keyboard",
+  "version": "1.0.0",
+  "description": "Mobile-friendly Kurdish (Sorani) virtual keyboard with C4Kurd-style layout — outputs Unicode Kurdish characters",
+  "main": "dist/kurdish-keyboard.js",
+  "module": "dist/kurdish-keyboard.js",
+  "types": "dist/kurdish-keyboard.d.ts",
+  "files": [
+    "dist",
+    "src",
+    "README.md",
+    "LICENSE"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/kurdish-keyboard.d.ts",
+      "import": "./dist/kurdish-keyboard.js",
+      "default": "./dist/kurdish-keyboard.js"
+    },
+    "./css": "./dist/kurdish-keyboard.css"
+  },
+  "scripts": {
+    "build": "tsc && cp src/kurdish-keyboard.css dist/",
+    "dev": "tsc --watch",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "kurdish",
+    "keyboard",
+    "sorani",
+    "virtual-keyboard",
+    "c4kurd",
+    "unicode",
+    "kurdish-text",
+    "kurdinus",
+    "ali-k"
+  ],
+  "license": "MIT",
+  "author": "",
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  }
+}

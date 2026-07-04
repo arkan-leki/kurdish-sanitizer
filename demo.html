@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="ckb" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>کوردیش کیبۆرد - Kurdish Keyboard Demo</title>
+    <link rel="stylesheet" href="src/kurdish-keyboard.css">
+    <style>
+        :root { --bg: #f0f4f8; --card: #fff; --border: #e2e8f0; --blue: #4299e1; --green: #48bb78; --red: #fc8181; --text: #1a202c; --muted: #718096; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: system-ui, sans-serif; background: var(--bg); min-height: 100vh; padding: 20px; }
+        .container { max-width: 900px; margin: 0 auto; }
+        h1 { font-size: 24px; color: var(--text); text-align: center; margin-bottom: 4px; }
+        .subtitle { text-align: center; color: var(--muted); font-size: 13px; margin-bottom: 16px; }
+
+        /* Tabs */
+        .tabs { display: flex; gap: 4px; margin-bottom: 20px; justify-content: center; flex-wrap: wrap; }
+        .tab-btn { padding: 10px 20px; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.15s; background: var(--border); color: var(--text); }
+        .tab-btn.active { background: var(--blue); color: #fff; }
+
+        /* Cards */
+        .card { background: var(--card); border-radius: 12px; padding: 20px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); margin-bottom: 16px; }
+        label { display: block; font-size: 13px; font-weight: 600; color: #4a5568; margin: 12px 0 6px; }
+        textarea, input { width: 100%; padding: 14px; font-size: 18px; border: 2px solid var(--border); border-radius: 10px; line-height: 1.8; background: #fff; }
+        textarea:focus, input:focus { outline: none; border-color: var(--blue); }
+        textarea { min-height: 100px; resize: vertical; }
+        .badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 600; margin-right: 4px; }
+        .badge-green { background: #c6f6d5; color: #22543d; }
+        .badge-blue { background: #bee3f8; color: #2b6cb0; }
+        .badge-purple { background: #e9d5ff; color: #6b21a8; }
+
+        /* Search */
+        .search-box { position: relative; margin-bottom: 16px; }
+        .search-box input { width: 100%; padding: 14px 48px 14px 16px; font-size: 18px; border: 2px solid var(--border); border-radius: 12px; background: #fff; direction: rtl; }
+        .search-box input:focus { outline: none; border-color: var(--blue); box-shadow: 0 0 0 3px rgba(66,153,225,0.15); }
+        .search-icon { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); font-size: 20px; color: var(--muted); pointer-events: none; }
+        .search-hint { font-size: 11px; color: var(--muted); margin-top: 4px; text-align: center; }
+
+        /* Table */
+        .table-wrap { border-radius: 12px; overflow: hidden; border: 1px solid var(--border); }
+        table { width: 100%; border-collapse: collapse; }
+        th { background: #edf2f7; color: var(--text); font-size: 13px; font-weight: 700; padding: 12px 16px; text-align: right; border-bottom: 2px solid var(--border); }
+        td { padding: 12px 16px; font-size: 15px; border-bottom: 1px solid #f0f0f0; color: #2d3748; }
+        tr:hover td { background: #f7fafc; }
+        .col-name { font-weight: 600; color: #1a202c; }
+        .col-dept { color: var(--blue); font-size: 13px; }
+        .col-city { color: var(--muted); font-size: 13px; }
+        .col-status { text-align: center; }
+        .pill { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; }
+        .pill-active { background: #c6f6d5; color: #22543d; }
+        .pill-inactive { background: #fed7d0; color: #742a2a; }
+        .pill-pending { background: #fefcbf; color: #744210; }
+        .badge-match { font-size: 10px; background: #bee3f8; color: #2b6cb0; padding: 1px 6px; border-radius: 8px; margin-right: 6px; }
+        .stats-row { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; flex-wrap: wrap; gap: 8px; font-size: 13px; color: var(--muted); }
+        .no-results { text-align: center; padding: 40px 20px; color: var(--muted); font-size: 16px; }
+        .no-results strong { color: var(--text); }
+        .example-box { margin-top: 14px; padding: 12px; background: #f7fafc; border-radius: 8px; border: 1px dashed #cbd5e0; }
+        .example-box h4 { font-size: 12px; color: var(--muted); margin-bottom: 6px; }
+        .ex-btns { display: flex; flex-wrap: wrap; gap: 5px; }
+        .ex-btn { padding: 5px 12px; font-size: 12px; background: #fff; border: 1px solid var(--border); border-radius: 6px; cursor: pointer; }
+        .ex-btn:hover { background: #edf2f7; }
+
+        @media (max-width: 600px) {
+            th, td { padding: 10px 10px; font-size: 14px; }
+            .search-box input { font-size: 16px; padding: 12px 42px 12px 12px; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>⌨️ کوردیش کیبۆرد</h1>
+    <p class="subtitle">تەختەکلیلی کوردی — بە شێوازی عەرەبی (نەک QWERTY) — لەگەڵ گۆڕینی خۆکار</p>
+
+    <!-- === Tabs === -->
+    <div class="tabs">
+        <button class="tab-btn active" id="tab-demos" onclick="switchTab('demos')">🎮 نموونەکان</button>
+        <button class="tab-btn" id="tab-table" onclick="switchTab('table')">📋 خشتەی کارمەندان</button>
+    </div>
+
+    <!-- === TAB 1: Demos === -->
+    <div id="panel-demos">
+        <div class="card">
+            <label><span class="badge badge-green">خۆکار</span> Auto-convert (Ali-K / Latin → کوردی):</label>
+            <textarea id="auto" placeholder="Ali-K بنووسە: kUrdy, pYSwazy, mNdAL ..."></textarea>
+            <div class="example-box">
+                <h4>📌 نموونە:</h4>
+                <div class="ex-btns">
+                    <button class="ex-btn" onclick="tryIt('kUrdy')">kUrdy → کوردی</button>
+                    <button class="ex-btn" onclick="tryIt('pYSwazy')">pYSwazy → پێشوازی</button>
+                    <button class="ex-btn" onclick="tryIt('mNdAL')">mNdAL → منداڵ</button>
+                    <button class="ex-btn" onclick="tryIt('drYzh')">drYzh → درێژ</button>
+                    <button class="ex-btn" onclick="tryIt('rojbaS')">rojbaS → رۆژباش</button>
+                    <button class="ex-btn" onclick="tryIt('كوردي')">كوردي (Arabic KB)</button>
+                    <button class="ex-btn" onclick="tryIt('kurdi')">kurdi (Latin)</button>
+                    <button class="ex-btn" onclick="tryIt('silaw')">silaw (Latin)</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <label><span class="badge badge-blue">کیبۆرد</span> Keyboard — ژمارەی کوردی (٠١٢٣):</label>
+            <input type="text" id="manual" placeholder="لێرە کلیک بکە... ژمارەکان: ٠١٢٣" style="direction:rtl;">
+        </div>
+
+        <div class="card">
+            <label><span class="badge badge-purple">لاتینی</span> Keyboard — ژمارەی لاتینی (0123):</label>
+            <input type="text" id="latin" placeholder="لێرە کلیک بکە... ژمارەکان: 0123" style="direction:rtl;">
+        </div>
+    </div>
+
+    <!-- === TAB 2: Table Search === -->
+    <div id="panel-table" style="display:none;">
+        <div class="card">
+            <label>🔍 بگەڕێ بە هەر شێوازێک — Ali-K، لاتینی، کوردی، عەرەبی:</label>
+            <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input id="search" type="text" placeholder="بگەڕێ... نموونە: kUrdy, aSo, هەولێر, hewler, ئەکتەڤ..." autocomplete="off">
+            </div>
+            <div class="search-hint">
+                💡 Ali-K و C4Kurd و لاتینی و کوردی و عەرەبی — هەر شتێک بنووسیت دەگەڕێت
+            </div>
+            <div class="table-wrap" id="table-container"></div>
+            <div class="stats-row"><span id="stats"></span></div>
+        </div>
+    </div>
+</div>
+
+<script>
+// === Tab switching ===
+function switchTab(tab) {
+    document.getElementById('panel-demos').style.display = tab === 'demos' ? '' : 'none';
+    document.getElementById('panel-table').style.display = tab === 'table' ? '' : 'none';
+    document.getElementById('tab-demos').classList.toggle('active', tab === 'demos');
+    document.getElementById('tab-table').classList.toggle('active', tab === 'table');
+}
+
+function tryIt(text) {
+    var el = document.getElementById('auto');
+    el.value = text;
+    el.focus();
+    el.dispatchEvent(new Event('focus', { bubbles: true }));
+    el.dispatchEvent(new Event('input', { bubbles: true }));
+    el.dispatchEvent(new Event('blur', { bubbles: true }));
+}
+</script>
+
+<script type="module">
+    import { KurdishKeyboard, convertMixedText } from './dist/kurdish-keyboard.js';
+
+    // === TAB 1: Keyboard demos ===
+    new KurdishKeyboard({
+        target: '#auto',
+        autoConvert: 'auto',
+        floatingButton: true,
+        onChange: (val) => console.log('[auto-convert]', val)
+    });
+    new KurdishKeyboard({
+        target: '#manual',
+        floatingButton: true,
+        numberFormat: 'arabic',
+        onChange: (val) => console.log('[arabic-nums]', val)
+    });
+    new KurdishKeyboard({
+        target: '#latin',
+        floatingButton: true,
+        numberFormat: 'latin',
+        onChange: (val) => console.log('[latin-nums]', val)
+    });
+
+    // === TAB 2: Table + Search ===
+    // Corrupted data + their clean equivalents for cross-encoding search
+    const data = [
+        { name: 'ئاسv مەمودی', cleanName: 'ئاسۆ مەحمودی', dept: 'تەکنەلvژیا', cleanDept: 'تەکنەلۆژیا', city: 'سلێمانی', status: 'active' },
+        { name: 'سارا كـەريـم', cleanName: 'سارا کەریم', dept: 'دیزاین', cleanDept: 'دیزاین', city: 'هـەولـێـر', cleanCity: 'هەولێر', status: 'active' },
+        { name: 'هێمن عەزير', cleanName: 'هێمن عەزیز', dept: 'ماركێتينگ', cleanDept: 'مارکێتینگ', city: 'دهۆك', cleanCity: 'دهۆک', status: 'active' },
+        { name: 'شيـلان حەسەن', cleanName: 'شیلان حەسەن', dept: 'دارايـي', cleanDept: 'دارایی', city: 'كـەركوك', cleanCity: 'کەرکوک', status: 'pending' },
+        { name: 'بـەخـتيـار عومەر', cleanName: 'بەختیار عومەر', dept: 'تەکنەلvژیا', cleanDept: 'تەکنەلۆژیا', city: 'هـەولـێـر', cleanCity: 'هەولێر', status: 'active' },
+        { name: 'لـەیلا فەرەج', cleanName: 'لەیلا فەرەج', dept: 'سەرچاوە مرۆيـيەکان', cleanDept: 'سەرچاوە مرۆییەکان', city: 'سلێمانی', status: 'inactive' },
+        { name: 'ڕێباز جەلال', cleanName: 'ڕێباز جەلال', dept: 'لvجستیک', cleanDept: 'لۆجستیک', city: 'كـەركوك', cleanCity: 'کەرکوک', status: 'active' },
+        { name: 'نـەسـريـن عەبدوڵڵا', cleanName: 'نەسرین عەبدوڵڵا', dept: 'یاسایی', cleanDept: 'یاسایی', city: 'هـەولـێـر', cleanCity: 'هەولێر', status: 'active' },
+        { name: 'كـارزان فەتاح', cleanName: 'کارزان فەتاح', dept: 'تەکنەلvژیا', cleanDept: 'تەکنەلۆژیا', city: 'سلێمانی', status: 'pending' },
+        { name: 'ئاوات سـەعـيـد', cleanName: 'ئاوات سەعید', dept: 'ماركێتينگ', cleanDept: 'مارکێتینگ', city: 'دهۆك', cleanCity: 'دهۆک', status: 'active' },
+        { name: 'سvما قادر', cleanName: 'سۆما قادر', dept: 'دیزاین', cleanDept: 'دیزاین', city: 'هـەولـێـر', cleanCity: 'هەولێر', status: 'inactive' },
+        { name: 'هيوا ڕەسvڵ', cleanName: 'هیوا ڕەسوڵ', dept: 'لvجستیک', cleanDept: 'لۆجستیک', city: 'كـەركوك', cleanCity: 'کەرکوک', status: 'active' },
+        { name: 'پـەرويـن شـەريـف', cleanName: 'پەروین شەریف', dept: 'سەرچاوە مرۆيـيەکان', cleanDept: 'سەرچاوە مرۆییەکان', city: 'سلێمانی', status: 'active' },
+        { name: 'ئارام مستەفا', cleanName: 'ئارام مستەفا', dept: 'تەکنەلvژیا', cleanDept: 'تەکنەلۆژیا', city: 'دهۆك', cleanCity: 'دهۆک', status: 'active' },
+        { name: 'ژيان حوسێـن', cleanName: 'ژیان حوسێن', dept: 'دارايـي', cleanDept: 'دارایی', city: 'هـەولـێـر', cleanCity: 'هەولێر', status: 'pending' },
+    ];
+
+    const statusMap = {
+        active:   '<span class="pill pill-active">چالاک</span>',
+        inactive: '<span class="pill pill-inactive">ناچالاک</span>',
+        pending:  '<span class="pill pill-pending">چاوەڕوان</span>',
+    };
+
+    function escapeHtml(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+    function highlightMatch(text, query) {
+        if (!query) return text;
+        var esc = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        return text.replace(new RegExp('(' + esc + ')', 'gi'), '<mark style="background:#fef08a;padding:0 2px;border-radius:2px;">$1</mark>');
+    }
+
+    var activeQuery = '';
+
+    function doSearch() {
+        var rawQuery = document.getElementById('search').value.trim();
+        activeQuery = rawQuery;
+        var container = document.getElementById('table-container');
+        var statsEl = document.getElementById('stats');
+
+        if (!rawQuery) {
+            data.forEach(function(r) { r._highlightName = r.name; r._matchedBy = ''; });
+            container.innerHTML = buildTable(data);
+            statsEl.innerHTML = '<strong>' + data.length + '</strong> کارمەند | <span style="color:#38a169;">✅ هەموو</span>';
+            return;
+        }
+
+        var normalizedQuery = convertMixedText(rawQuery, 'auto').trim().toLowerCase();
+        var searchTerms = [normalizedQuery];
+        if (rawQuery !== normalizedQuery) searchTerms.push(rawQuery.toLowerCase());
+
+        var matched = [], seen = new Set();
+
+        data.forEach(function(row) {
+            // Search against all fields: corrupted + clean equivalents
+            var searchable = [
+                row.name, row.cleanName || '', row.dept, row.cleanDept || '',
+                row.city, row.cleanCity || '',
+                row.status === 'active' ? 'چالاک چalak active' :
+                row.status === 'inactive' ? 'ناچالاک naچalak inactive' :
+                'چاوەڕوان chaweڕwan pending'
+            ].join(' ');
+
+            var normRow = convertMixedText(searchable, 'auto').toLowerCase();
+            var found = false, matchedBy = '';
+
+            for (var t = 0; t < searchTerms.length; t++) {
+                var term = searchTerms[t];
+                if (!term) continue;
+                if (normRow.indexOf(term) !== -1) { matchedBy = 'یونیکۆد'; found = true; break; }
+                if (searchable.toLowerCase().indexOf(term) !== -1) { matchedBy = 'ڕاستەوخۆ'; found = true; break; }
+                var trans = convertMixedText(term, 'auto').toLowerCase();
+                if (trans && trans !== term && normRow.indexOf(trans) !== -1) { matchedBy = 'گۆڕاو'; found = true; break; }
+            }
+
+            var key = row.name + '|' + row.city;
+            if (found && !seen.has(key)) {
+                seen.add(key);
+                row._highlightName = highlightMatch(row.name, rawQuery);
+                row._matchedBy = matchedBy;
+                matched.push(row);
+            }
+        });
+
+        container.innerHTML = buildTable(matched);
+        statsEl.innerHTML = '<strong>' + matched.length + '</strong> لە <strong>' + data.length + '</strong> دۆزرایەوە';
+    }
+
+    function buildTable(rows) {
+        var h = '<table><thead><tr><th>ناو</th><th>بەش</th><th>شار</th><th style="text-align:center">ڕەوش</th></tr></thead><tbody>';
+        if (rows.length === 0) {
+            h += '<tr><td colspan="4"><div class="no-results">🔍 هیچ ئەنجامێک نەدۆزرایەوە بۆ <strong>"' + escapeHtml(activeQuery) + '"</strong></div></td></tr>';
+        } else {
+            rows.forEach(function(r) {
+                var badge = r._matchedBy ? '<span class="badge-match">' + r._matchedBy + '</span>' : '';
+                h += '<tr><td class="col-name">' + badge + (r._highlightName || r.name) + '</td>' +
+                    '<td class="col-dept">' + r.dept + '</td><td class="col-city">' + r.city + '</td>' +
+                    '<td class="col-status">' + statusMap[r.status] + '</td></tr>';
+            });
+        }
+        h += '</tbody></table>';
+        return h;
+    }
+
+    // Initial render
+    doSearch();
+
+    // Search debounce
+    var timer;
+    document.getElementById('search').addEventListener('input', function() {
+        clearTimeout(timer);
+        timer = setTimeout(doSearch, 250);
+    });
+
+    // Keyboard on search box
+    new KurdishKeyboard({
+        target: '#search',
+        autoConvert: 'auto',
+        numberFormat: 'arabic',
+        floatingButton: true,
+        onChange: function() {}
+    });
+
+    console.log('✅ Demo ready — 2 tabs: Demos + Table Search');
+</script>
+</body>
+</html>
