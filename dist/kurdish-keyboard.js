@@ -571,3 +571,18 @@ export class KurdishKeyboard {
     }
 }
 export default KurdishKeyboard;
+// Self-register on window for non-module <script> usage
+if (typeof window !== 'undefined') {
+    window.KurdishSanitizer = {
+        KurdishKeyboard,
+        sanitize,
+        normalize,
+        normalizePunctuations,
+        convertMixedText,
+        convertAliK,
+        convertArabicKB,
+        convertLatin,
+        ALI_K_MAP,
+        ARABIC_KB_MAP,
+    };
+}
