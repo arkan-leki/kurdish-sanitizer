@@ -141,6 +141,57 @@ export function convertMixedText(text, mode) {
     }
     return result;
 }
+// ============================================================
+// Text sanitization functions
+// ============================================================
+function _apply(text, pairs) {
+    for (let i = 0; i < pairs.length; i += 2)
+        text = text.replace(new RegExp(pairs[i], 'gim'), pairs[i + 1]);
+    return text;
+}
+/** Normalize Kurdish text: fix Ya/Kaf, Heh, ZWNJ, Tatweel */
+export function normalize(text) {
+    if (!text)
+        return '';
+    const H = '\u0620-\u064A\u066E-\u06D5\u06FA-\u06FF\u0750-\u077F';
+    const h = '\u064B-\u065F';
+    return _apply(text, [
+        'ي|ى|ے', 'ی', 'ك|ڪ', 'ک',
+        '(\u201C|\\(\\()', '«', '(\u201D|\\)\\))', '»',
+        '([^ ])  ([^ ])', '$1 $2', '\u200c{2,}', '\u200c',
+        '\u06BE([^ـ' + H + h + ']|$)', 'هـ$1', '\u06BE', 'ه',
+        '\u0647\u200C', '\u06D5', '\u0647\u200D', 'هـ',
+        '([ءادرڕزژوۆە])\u200C', '$1',
+        '\u0647([^ـ' + H + h + '])', '\u06D5$1',
+        '\u200Cو ', ' و ',
+        '([' + H + '])\u200C([^' + H + '])', '$1$2',
+        'ـ{2,}', 'ـ',
+        'ـ([ئبپتجچحخسشعغفڤقکگلڵمنهیێءادرڕزژۆە])', '$1',
+        '([بپتجچحخسشعغفڤقکگلڵمنیێ])ـ', '$1',
+        '(^|[^هئ])ـ', '$1-'
+    ]);
+}
+/** Fix punctuation spacing in Kurdish text */
+export function normalizePunctuations(text) {
+    if (!text)
+        return '';
+    const H = '\u0620-\u064A\u066E-\u06D5\u06FA-\u06FF\u0750-\u077F';
+    return _apply(text, [
+        '([،:؛؟!»)}\\]\\)])([' + H + '])', '$1 $2',
+        '([' + H + ']) ([\\.،:؛؟!»)}\\]\\)])', '$1$2',
+        '\\.([' + H + ']{2,})', '. $1',
+        '([' + H + '])([(«{\\[\[])', '$1 $2',
+        '([(«{\\[\[]) ([' + H + '])', '$1$2',
+        '(^|\\n)(\\d+)-([' + H + '])', '$1$2- $3'
+    ]);
+}
+/** Full sanitize pipeline: strip ZWNJ + normalize + fix punctuation */
+export function sanitize(text) {
+    if (!text)
+        return '';
+    text = text.replace(/‌/g, ''); // strip ZWNJ
+    return normalizePunctuations(normalize(text));
+}
 // ---- Layouts ----
 const LAYOUTS = {
     standard: [

@@ -46,6 +46,12 @@ export declare function convertLatin(text: string): string;
  *      "dzn" → "دزن"
  */
 export declare function convertMixedText(text: string, mode: AutoConvert | 'auto'): string;
+/** Normalize Kurdish text: fix Ya/Kaf, Heh, ZWNJ, Tatweel */
+export declare function normalize(text: string): string;
+/** Fix punctuation spacing in Kurdish text */
+export declare function normalizePunctuations(text: string): string;
+/** Full sanitize pipeline: strip ZWNJ + normalize + fix punctuation */
+export declare function sanitize(text: string): string;
 export interface KurdishKeyboardOptions {
     /** Target input/textarea element (or CSS selector) */
     target: HTMLInputElement | HTMLTextAreaElement | string;
